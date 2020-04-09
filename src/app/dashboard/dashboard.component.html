@@ -1,0 +1,91 @@
+<div class="container" style="padding: 8px;">
+  <div class="row">
+    <div class="col-sm">
+     <h3>Daily Task Manager</h3> 
+    </div>
+    <div class="col-sm">
+     
+    </div>
+    <div class="col-sm" style="position: relative;left: 278px;">
+      <button mat-raised-button color="primary" (click)="addNewTask()">add new task</button>
+     </div>
+  </div>
+  <div class="row">
+    <h4>Complete</h4>:<h4>{{percentage}}%</h4>
+  </div>
+</div>
+<div class="board">
+  <div class="card-list mat-elevation-z1" *ngFor="let track of tracks; let i=index">
+
+    <h2 cdkDragHandle class="mat-h2">{{track?.title}}</h2>
+
+    <div class="card-list-content" cdkDropList [id]="track?.id" [cdkDropListData]="track?.tasks" [cdkDropListConnectedTo]="trackIds"
+      (cdkDropListDropped)="onTaskDrop($event)" >
+
+
+      <mat-card style="margin: 2%;" *ngFor="let task of track.tasks; let j = index" cdkDrag>
+        <!-- Use the mat-card-content to add the proper spacing. -->
+        <mat-card-content>
+          <h2>{{task?.title}}</h2>
+          {{task?.description}}
+          <button *ngIf="track?.id === 'pending'" mat-icon-button color="primary" (click)="cardOperation(track.id,task,'edit',j)" aria-label="edit">
+            <i class="fa fa-pencil"></i>
+        </button>
+        <button *ngIf="track?.id === 'pending' || track?.id === 'inprogress'" mat-icon-button color="warn" (click)="cardOperation(track.id,task,'delete',j)" aria-label="delete">
+          <i class="fa fa-trash"></i>
+      </button>
+    
+      <button *ngIf="track?.id === 'pending' || track?.id === 'inprogress'" mat-icon-button color="warn" (click)="cardOperation(track.id,task,'priority',j)" aria-label="delete">
+        <!-- <i [ngClass]="{'fa fa-arrow-up':task.priority == 'high','fa fa-arrow-down':task.priority == 'low'}"></i> -->
+        <i *ngIf="task.priority == 'high'" class="fa fa-arrow-up"></i>
+        <i *ngIf="task.priority == 'low'" class="fa fa-arrow-down"></i>
+      </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true" data-toggle="modal" data-target="#exampleModalCenter">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">Add/Edit Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card" style="width: 29rem;">          
+          <div class="card-body">
+            <div class="example-container">
+              <mat-form-field appearance="fill">
+                <mat-label>Task Title</mat-label>
+                <input matInput>
+              </mat-form-field>
+              <br>    
+              <mat-form-field appearance="fill">
+                <mat-label>Description</mat-label>
+                <input matInput>
+              </mat-form-field>
+              <br>
+              <mat-form-field appearance="fill">
+                <mat-label>Select Priority</mat-label>
+                <mat-select>
+                  <mat-option value="option">High</mat-option>
+                  <mat-option value="option">Low</mat-option>
+                </mat-select>
+              </mat-form-field>          
+           </div>          
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>        
+      </div>
+    </div>
+  </div>
+</div>
+
